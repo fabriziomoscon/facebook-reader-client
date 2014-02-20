@@ -4,12 +4,13 @@
 
   app = angular.module('app', ['ngRoute']);
 
-  app.config(function($routeProvider, $locationProvider) {
+  app.config(function($routeProvider, $locationProvider, $sceDelegateProvider) {
     $routeProvider.when('/radio', {
       templateUrl: 'partials/radio.html',
       controller: 'RadioCtrl'
     });
-    return $locationProvider.html5Mode(false);
+    $locationProvider.html5Mode(false);
+    return $sceDelegateProvider.resourceUrlWhitelist(['self', 'http://*.youtube.com/**']);
   });
 
   app.controller('RadioCtrl', function($scope, $http) {
@@ -20,6 +21,20 @@
     }, function(error) {
       return $scope.error = error;
     });
+  });
+
+  angular.module('app').directive('youtubeembed', function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: "directive/youtubeembed.html",
+      scope: {
+        source: '@'
+      },
+      link: function(scope) {
+        return scope.sourcenotautoplay = scope.source.replace('autoplay=1', 'autoplay=0');
+      }
+    };
   });
 
 }).call(this);

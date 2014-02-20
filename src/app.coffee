@@ -1,6 +1,6 @@
 app = angular.module 'app', ['ngRoute']
 
-app.config ($routeProvider, $locationProvider) ->
+app.config ($routeProvider, $locationProvider, $sceDelegateProvider) ->
   $routeProvider
     .when('/radio', {
       templateUrl:    'partials/radio.html',
@@ -11,6 +11,12 @@ app.config ($routeProvider, $locationProvider) ->
     # })
 
   $locationProvider.html5Mode false
+
+  $sceDelegateProvider.resourceUrlWhitelist [
+    'self'
+    'http://*.youtube.com/**'
+    ]
+
 
 app.controller 'RadioCtrl', ($scope, $http) ->
 
